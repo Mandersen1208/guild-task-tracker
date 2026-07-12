@@ -1,30 +1,40 @@
 # guild-task-tracker
 
-Small responsive React task tracker with local persistence. Features limited to create, complete, filter, and delete tasks. Intentionally minimal.
+Small responsive React task tracker with local persistence.
 
-## Features
+**Legitimate React application** — Vite + TypeScript + Tailwind.
+
+## Features (strictly limited)
 - Create tasks
-- Mark tasks complete
+- Mark complete
 - Filter (All / Active / Completed)
 - Delete tasks
-- Persists via browser localStorage
+- Persists to localStorage
 
-## The App
+## Guild Delivery
 
-Open `index.html` in any modern browser. No build step required — it is a self-contained React application using CDN resources for maximum simplicity.
+Coordinated by Roy with the full guild:
 
-## Guild Coordination
+- **Shiroe** — Architecture (single state, clean boundaries)
+- **Marin** — UX design
+- **Guts** — Implementation
+- **Maomao** — Test scenarios
+- **Frieren** — Persistence layer
+- **Kisuke Urahara** — Platform
 
-This delivery was coordinated by Roy with contributions from the full guild:
+## Development
 
-- **Shiroe** — Architecture: Single source of truth state, 4 clean components, useState + useEffect only.
-- **Marin** — UX: Calm, intuitive, mobile-first design with Tailwind.
-- **Guts** — Implementation: Ready to own the React build.
-- **Maomao** — Quality: Defined 5 precise Playwright test scenarios covering every required flow.
-- **Frieren** — Memory: Robust localStorage layer with integrity checks and safe serialization.
-- **Kisuke Urahara** — Platform: Repo hygiene and minimal documentation.
+```bash
+git clone https://github.com/Mandersen1208/guild-task-tracker.git
+cd guild-task-tracker
+npm install
+npm run dev
+```
 
-## Notes
-- Scope strictly limited to the four operations.
-- No extra features, no external dependencies beyond the CDNs.
-- Ready for Playwright testing against the defined scenarios.
+Open http://localhost:5173
+
+## Build
+
+```bash
+npm run build
+```

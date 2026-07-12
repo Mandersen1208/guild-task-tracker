@@ -4,104 +4,95 @@
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #fff0f5;
+  background: #f9f5f0;
   background-image: 
-    linear-gradient(#ffe4e1 1px, transparent 1px),
-    linear-gradient(90deg, #ffe4e1 1px, transparent 1px);
-  background-size: 40px 40px;
+    linear-gradient(#f0e9df 1px, transparent 1px),
+    linear-gradient(90deg, #f0e9df 1px, transparent 1px);
+  background-size: 44px 44px;
 }
 
-/* 90s Kawaii Blog Vibes */
+/* Cozy 90s Japanese Blog */
 .kawaii-container {
-  background: white;
-  border: 6px solid #ffb6c1;
-  box-shadow: 0 0 0 6px #ff69b4, 0 10px 30px rgba(255, 105, 180, 0.3);
+  background: #fdfaf5;
+  border: 5px solid #e8d9c9;
+  box-shadow: 0 0 0 5px #f0e4d4, 0 8px 25px rgba(0,0,0,0.06);
   position: relative;
   overflow: hidden;
 }
 
-/* Floating Sparkles Background */
+/* Subtle Sparkles (much gentler) */
 .sparkles {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background-image: 
-    radial-gradient(circle, #ff69b4 1px, transparent 1px),
-    radial-gradient(circle, #87ceeb 1px, transparent 1px),
-    radial-gradient(circle, #98fb98 1px, transparent 1px);
-  background-size: 60px 60px, 80px 80px, 50px 50px;
-  animation: sparkleFloat 8s linear infinite;
-  opacity: 0.25;
+    radial-gradient(circle, #d4b89e 1px, transparent 1px);
+  background-size: 70px 70px;
+  animation: sparkleFloat 12s linear infinite;
+  opacity: 0.12;
 }
 
 @keyframes sparkleFloat {
-  0% { background-position: 0 0, 0 0, 0 0; }
-  100% { background-position: 60px 120px, 80px 160px, 50px 100px; }
+  0% { background-position: 0 0; }
+  100% { background-position: 70px 140px; }
 }
 
-/* Bouncy Header */
+/* Soft Header */
 .kawaii-header {
-  font-size: 2rem;
-  background: linear-gradient(90deg, #ff69b4, #87ceeb, #98fb98, #ff69b4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: rainbowShift 3s linear infinite;
-  text-shadow: 2px 2px 0 #fff;
+  font-size: 1.85rem;
+  color: #8c6f5c;
+  text-shadow: 1px 1px 0 #f9f5f0;
 }
 
-@keyframes rainbowShift {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-}
-
-/* Cute Filter Pills */
+/* Gentle Filter Pills */
 .filter-pill {
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s ease;
   font-weight: 600;
+  border-color: #e8d9c9;
 }
 .filter-pill.active {
-  transform: scale(1.05);
-  box-shadow: 0 0 0 3px #fff, 0 4px 15px rgba(0,0,0,0.1);
+  background-color: #e8d9c9;
+  color: #5c4638;
+  border-color: #d4b89e;
+  transform: scale(1.02);
 }
 
-/* Bouncy Add Button */
+/* Soft Add Button */
 .add-button {
-  background: linear-gradient(#ff69b4, #ff1493);
-  transition: transform 0.1s ease;
-  box-shadow: 0 4px 0 #c71585;
+  background: #d4b89e;
+  color: #5c4638;
+  transition: all 0.1s ease;
+  box-shadow: 0 3px 0 #b89d82;
 }
 .add-button:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 #c71585;
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #b89d82;
 }
 
-/* Completion Burst */
-.completed {
-  animation: completePop 0.4s ease forwards;
-}
-
-@keyframes completePop {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.03); }
-  100% { transform: scale(1); }
+/* Completion */
+.completed .task-text {
+  color: #c9b29f;
+  text-decoration: line-through;
+  transition: all 0.3s ease;
 }
 
 /* Task Rows */
 .task-row {
   transition: all 0.2s ease;
-  border: 2px solid #ffb6c1;
+  border: 2px solid #e8d9c9;
+  background: white;
 }
 .task-row:hover {
-  transform: translateY(-2px);
-  border-color: #ff69b4;
+  border-color: #d4b89e;
+  transform: translateY(-1px);
 }
 
-/* Extra Cute Empty State */
+/* Gentle Empty State */
 .empty-state {
-  animation: gentleBob 2s ease infinite;
+  animation: gentleBob 3s ease infinite;
 }
 
 @keyframes gentleBob {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  50% { transform: translateY(-4px); }
 }

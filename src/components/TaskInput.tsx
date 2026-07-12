@@ -28,14 +28,14 @@ export default function TaskInput({ onAdd }: TaskInputProps) {
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="add something cute..."
-        className="flex-1 px-5 py-3.5 bg-[#fff0f5] border-2 border-[#ffb6c1] rounded-3xl text-[#5c3d4d] placeholder:text-[#e8a0b0] focus:outline-none focus:border-[#ff69b4] text-sm"
+        placeholder="add something..."
+        className="flex-1 px-5 py-3.5 bg-[#f9f5f0] border-2 border-[#e8d9c9] rounded-3xl text-[#5c4638] placeholder:text-[#c9b29f] focus:outline-none focus:border-[#d4b89e] text-sm"
       />
       <button
         onClick={handleSubmit}
-        className="add-button px-7 py-3.5 text-white font-bold rounded-3xl text-sm active:scale-[0.985]"
+        className="add-button px-7 py-3.5 rounded-3xl text-sm font-medium active:scale-[0.985]"
       >
-        Add ✨
+        Add
       </button>
     </div>
   );

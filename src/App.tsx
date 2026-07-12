@@ -22,46 +22,60 @@ export default function App() {
   const activeCount = tasks.filter(t => !t.completed).length;
   const completedCount = tasks.filter(t => t.completed).length;
 
+  const getFilterClass = (f: Filter) => {
+    if (filter !== f) return 'filter-pill';
+    if (f === 'all') return 'filter-pill active-all';
+    if (f === 'active') return 'filter-pill active-active';
+    return 'filter-pill active-completed';
+  };
+
   return (
-    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-8">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">Tasks</h1>
-        <p className="text-sm text-gray-500 mt-1">Stay on top of what matters</p>
+    <div className="max-w-md mx-auto p-6 mt-8">
+      {/* Expressive Header */}
+      <div className="mb-8 text-center">
+        <div className="inline-flex items-center gap-2 mb-2">
+          <div className="w-8 h-8 rounded-full bg-[#E07A5F] flex items-center justify-center">
+            <span className="text-white text-lg">✓</span>
+          </div>
+          <h1 className="text-3xl font-semibold text-[#3f2e2a] tracking-tight">Tasks</h1>
+        </div>
+        <p className="text-[#8a6f5c] text-sm">A little space for what matters</p>
       </div>
 
-      <TaskInput onAdd={addTask} />
+      <div className="task-card rounded-3xl shadow-sm border p-6">
+        <TaskInput onAdd={addTask} />
 
-      {/* Filters */}
-      <div className="flex gap-1 mb-4 bg-gray-100 p-1 rounded-xl w-fit">
-        <button
-          onClick={() => setFilter('all')}
-          className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-colors ${filter === 'all' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
-        >
-          All ({tasks.length})
-        </button>
-        <button
-          onClick={() => setFilter('active')}
-          className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-colors ${filter === 'active' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
-        >
-          Active ({activeCount})
-        </button>
-        <button
-          onClick={() => setFilter('completed')}
-          className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-colors ${filter === 'completed' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
-        >
-          Completed ({completedCount})
-        </button>
+        {/* Colorful Filter Pills */}
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setFilter('all')}
+            className={`flex-1 px-4 py-2 text-sm font-medium rounded-2xl border ${getFilterClass('all')}`}
+          >
+            All ({tasks.length})
+          </button>
+          <button
+            onClick={() => setFilter('active')}
+            className={`flex-1 px-4 py-2 text-sm font-medium rounded-2xl border ${getFilterClass('active')}`}
+          >
+            Active ({activeCount})
+          </button>
+          <button
+            onClick={() => setFilter('completed')}
+            className={`flex-1 px-4 py-2 text-sm font-medium rounded-2xl border ${getFilterClass('completed')}`}
+          >
+            Done ({completedCount})
+          </button>
+        </div>
+
+        <TaskList
+          tasks={filteredTasks}
+          onToggle={toggleComplete}
+          onDelete={deleteTask}
+        />
       </div>
 
-      <TaskList
-        tasks={filteredTasks}
-        onToggle={toggleComplete}
-        onDelete={deleteTask}
-      />
-
-      <div className="mt-6 text-center text-xs text-gray-400">
-        Data saved automatically in your browser
+      <div className="mt-6 text-center text-xs text-[#8a6f5c]">
+        Saved in your browser
       </div>
     </div>
   );

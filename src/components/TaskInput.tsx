@@ -21,8 +21,6 @@ export default function TaskInput({ onAdd }: TaskInputProps) {
     if (e.key === 'Enter') handleSubmit();
   };
 
-  const isDisabled = !value.trim();
-
   return (
     <div className="flex gap-2 mb-6">
       <input
@@ -30,16 +28,14 @@ export default function TaskInput({ onAdd }: TaskInputProps) {
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="What needs to be done?"
-        className="flex-1 px-4 py-3 bg-[#fdf6f0] border border-[#f3e8d8] rounded-2xl text-[#3f2e2a] placeholder:text-[#b89d8a] focus:outline-none focus:border-[#E07A5F] transition-colors"
+        placeholder="add something cute..."
+        className="flex-1 px-5 py-3.5 bg-[#fff0f5] border-2 border-[#ffb6c1] rounded-3xl text-[#5c3d4d] placeholder:text-[#e8a0b0] focus:outline-none focus:border-[#ff69b4] text-sm"
       />
       <button
         onClick={handleSubmit}
-        disabled={isDisabled}
-        className="add-button px-6 py-3 text-white rounded-2xl font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+        className="add-button px-7 py-3.5 text-white font-bold rounded-3xl text-sm active:scale-[0.985]"
       >
-        Add
+        Add ✨
       </button>
     </div>
   );

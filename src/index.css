@@ -4,62 +4,104 @@
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #FDF6F0;
+  background: #fff0f5;
+  background-image: 
+    linear-gradient(#ffe4e1 1px, transparent 1px),
+    linear-gradient(90deg, #ffe4e1 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
-/* Colorful Marin version */
-.task-card {
-  background-color: white;
-  border-color: #f3e8d8;
+/* 90s Kawaii Blog Vibes */
+.kawaii-container {
+  background: white;
+  border: 6px solid #ffb6c1;
+  box-shadow: 0 0 0 6px #ff69b4, 0 10px 30px rgba(255, 105, 180, 0.3);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Expressive Add button */
+/* Floating Sparkles Background */
+.sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(circle, #ff69b4 1px, transparent 1px),
+    radial-gradient(circle, #87ceeb 1px, transparent 1px),
+    radial-gradient(circle, #98fb98 1px, transparent 1px);
+  background-size: 60px 60px, 80px 80px, 50px 50px;
+  animation: sparkleFloat 8s linear infinite;
+  opacity: 0.25;
+}
+
+@keyframes sparkleFloat {
+  0% { background-position: 0 0, 0 0, 0 0; }
+  100% { background-position: 60px 120px, 80px 160px, 50px 100px; }
+}
+
+/* Bouncy Header */
+.kawaii-header {
+  font-size: 2rem;
+  background: linear-gradient(90deg, #ff69b4, #87ceeb, #98fb98, #ff69b4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbowShift 3s linear infinite;
+  text-shadow: 2px 2px 0 #fff;
+}
+
+@keyframes rainbowShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Cute Filter Pills */
+.filter-pill {
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-weight: 600;
+}
+.filter-pill.active {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 3px #fff, 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Bouncy Add Button */
 .add-button {
-  background: linear-gradient(135deg, #E07A5F 0%, #d96b4f 100%);
-  transition: all 0.1s ease;
-}
-.add-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(224, 122, 95, 0.3);
+  background: linear-gradient(#ff69b4, #ff1493);
+  transition: transform 0.1s ease;
+  box-shadow: 0 4px 0 #c71585;
 }
 .add-button:active {
-  transform: scale(0.985);
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #c71585;
 }
 
-/* Living filter pills */
-.filter-pill {
-  transition: all 0.15s ease;
-}
-.filter-pill.active-all {
-  background-color: #E07A5F;
-  color: white;
-}
-.filter-pill.active-active {
-  background-color: #81B29A;
-  color: white;
-}
-.filter-pill.active-completed {
-  background-color: #D4C1EC;
-  color: #4a3f5c;
+/* Completion Burst */
+.completed {
+  animation: completePop 0.4s ease forwards;
 }
 
-/* Delightful completion */
-.completed .task-text {
-  color: #D4C1EC;
-  text-decoration: line-through;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+@keyframes completePop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.03); }
+  100% { transform: scale(1); }
 }
 
-/* Task row tactility */
+/* Task Rows */
 .task-row {
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition: all 0.2s ease;
+  border: 2px solid #ffb6c1;
 }
 .task-row:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  transform: translateY(-2px);
+  border-color: #ff69b4;
 }
 
-/* Checkbox accent */
-input[type="checkbox"] {
-  accent-color: #81B29A;
+/* Extra Cute Empty State */
+.empty-state {
+  animation: gentleBob 2s ease infinite;
+}
+
+@keyframes gentleBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }

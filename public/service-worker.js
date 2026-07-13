@@ -1,10 +1,14 @@
 /**
  * Kawaii Daily - Service Worker
  * Provides offline support for the PWA on GitHub Pages subpath.
- * Caches app shell and core assets for full offline functionality (tasks via localStorage, clock, UI).
+ *
+ * Important deploy rule:
+ * - Navigations are network-first so users receive the latest Vite app shell after a Pages deploy.
+ * - Cached index.html is only used as an offline fallback.
  */
 
-const CACHE_NAME = 'kawaii-daily-v1';
+const CACHE_PREFIX = 'kawaii-daily-';
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const BASE = self.location.pathname.replace(/service-worker\.js$/, '');
 
 // Core app shell files to precache (relative to SW scope)
@@ -12,8 +16,15 @@ const APP_SHELL_FILES = [
   `${BASE}`,
   `${BASE}index.html`,
   `${BASE}manifest.json`,
-  // Icons will be cached on first use
+  // Icons and hashed Vite assets are cached on first successful fetch.
 ];
+
+function offlineFallback() {
+  return new Response(
+    '<!DOCTYPE html><html><body style="font-family:sans-serif;padding:2rem;text-align:center;"><h1>Offline</h1><p>Kawaii Daily is offline. Your tasks are saved locally.</p><p>Reconnect to sync or reload.</p></body></html>',
+    { headers: { 'Content-Type': 'text/html' } }
+  );
+}
 
 // Install: precache app shell
 self.addEventListener('install', (event) => {
@@ -26,13 +37,13 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate: clean up old caches
+// Activate: clean up only this app's old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
-          .filter((name) => name !== CACHE_NAME)
+          .filter((name) => name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME)
           .map((name) => {
             console.log('[SW] Deleting old cache:', name);
             return caches.delete(name);
@@ -43,36 +54,35 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch handler: cache-first for offline support
+// Fetch handler: network-first for app shell, cache-first for versioned/static assets
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   const url = new URL(request.url);
 
-  // Only handle same-origin requests
-  if (url.origin !== self.location.origin) {
+  // Only handle same-origin requests under this PWA scope.
+  if (url.origin !== self.location.origin || !url.pathname.startsWith(BASE)) {
     return;
   }
 
-  // Special handling for navigation requests (SPA fallback to index.html)
+  // Navigation requests must be network-first so fresh deploys show up.
   if (request.mode === 'navigate') {
     event.respondWith(
-      caches.match(`${BASE}index.html`).then((cachedResponse) => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-        return fetch(request).catch(() => {
-          // If completely offline and no cache, serve a minimal offline page
-          return new Response(
-            '<!DOCTYPE html><html><body style="font-family:sans-serif;padding:2rem;text-align:center;"><h1>Offline</h1><p>Kawaii Daily is offline. Your tasks are saved locally.</p><p>Reconnect to sync or reload.</p></body></html>',
-            { headers: { 'Content-Type': 'text/html' } }
-          );
-        });
-      })
+      fetch(request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(`${BASE}index.html`, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(`${BASE}index.html`).then((cachedResponse) => cachedResponse || offlineFallback()))
     );
     return;
   }
 
-  // For assets, scripts, styles, images: Cache first, then network, update cache
+  // For assets, scripts, styles, images: cache first, then network, update cache.
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
       if (cachedResponse) {
@@ -81,12 +91,11 @@ self.addEventListener('fetch', (event) => {
 
       return fetch(request)
         .then((networkResponse) => {
-          // Don't cache non-200 or non-basic responses
+          // Don't cache non-200 or non-basic responses.
           if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
             return networkResponse;
           }
 
-          // Cache the response for future offline use
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(request, responseToCache);
@@ -95,19 +104,10 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // Offline: if not cached, request fails (e.g. external images)
-          // Could add specific fallbacks here if needed
           console.log('[SW] Offline fetch failed for:', request.url);
         });
     })
   );
-});
-
-// Optional: message handler for skip waiting from client
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
 });
 
 // === Notification Platform (Kisuke) ===
@@ -122,13 +122,13 @@ self.addEventListener('notificationclick', (event) => {
     self.clients
       .matchAll({ type: 'window', includeUncontrolled: true })
       .then((clientsArr) => {
-        // Focus existing client if open
+        // Focus existing client if open.
         for (const client of clientsArr) {
           if (client.url.startsWith(urlToOpen) && 'focus' in client) {
             return client.focus();
           }
         }
-        // Open new window
+        // Open new window.
         if (self.clients.openWindow) {
           return self.clients.openWindow(urlToOpen);
         }
@@ -136,7 +136,7 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-// Receive SHOW_NOTIFICATION messages from the app (for EOD reminders via SW)
+// Receive SHOW_NOTIFICATION messages from the app.
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SHOW_NOTIFICATION') {
     const { title, options = {} } = event.data;
@@ -144,7 +144,7 @@ self.addEventListener('message', (event) => {
     self.registration.showNotification(title, {
       icon: iconPath,
       badge: iconPath,
-      tag: 'eod-reminder',
+      tag: options.tag || 'kawaii-daily-reminder',
       renotify: false,
       requireInteraction: false,
       ...options,

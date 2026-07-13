@@ -25,7 +25,7 @@ export default function TaskInput({ onAdd }: TaskInputProps) {
 
   return (
     <div className="mb-6">
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row">
         <input
           ref={inputRef}
           type="text"
@@ -33,9 +33,9 @@ export default function TaskInput({ onAdd }: TaskInputProps) {
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="add something..."
-          className="task-input flex-1 px-5 py-3.5 text-[#5C4638] placeholder:text-[#C9B29F] text-sm"
+          className="task-input flex-1 px-5 py-3.5 text-[#5C4638] placeholder:text-[#C9B29F] text-sm w-full"
         />
-        <button onClick={handleSubmit} className="add-button px-6 py-3.5 text-sm">
+        <button onClick={handleSubmit} className="add-button px-6 py-3.5 text-sm w-full sm:w-auto">
           Add
         </button>
       </div>

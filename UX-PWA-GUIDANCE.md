@@ -225,9 +225,45 @@ Ready for implementation review.
 
 ---
 
+## 6. Due Date Awareness — Soft Filters as the Primary Surface
+
+**Kawaii Philosophy Update**  
+The user wants due dates to stay cute and kawaii. No stress, no urgency theater.
+
+- **No visual indicators on individual tasks.** No red, orange, or warning colors, dots, borders, or strikethroughs for overdue tasks. The task list itself remains calm and beautiful at all times.
+- **Filters are the gentle way to surface awareness.** Users who want to focus on today can choose the filter; everyone else sees their full list without any alarming cues.
+
+**Recommended Filter Set** (replacing/extending current All / Active / Done)
+
+- **All tasks** — default view, shows everything with soft count
+- **Tasks due today** 🌸 — soft pastel active state, perhaps tiny flower or heart icon in the pill. Warm microcopy like “today’s gentle focus”
+- **Tasks completed** ✨ — keeps the satisfying done view
+
+Filter pills stay in the existing cute style: rounded, pastel backgrounds (#FFF8F5, #F8B4C4 accents), active state slightly richer but still soft and friendly. No harsh contrasts.
+
+**Due Date Display (when present)**
+- Show due date text subtly under the task in small, warm typography using existing text colors (#8C6F5C or #B8A99A).
+- Friendly language only: “due today 💕”, “due tomorrow 🌷”, “this week 🌸”
+- Never alarming or urgent wording.
+
+**Adding & Managing Due Dates**
+- In TaskInput or task edit, offer a soft date picker or quick cute options: Today, Tomorrow, This Week, or custom (gentle calendar modal with pastel theme).
+- Due dates are optional and low-pressure — many tasks can remain undated.
+
+**Why This Approach Feels Right**
+- Preserves the low-pressure, ritualistic charm of Kawaii Daily.
+- Lets users self-select their focus level without the app “judging” overdue items.
+- Consistent with the existing aesthetic: soft, rounded, pastel, emoji-delightful, emotionally safe.
+
+This keeps due-date awareness helpful and adorable rather than stressful.
+
+---
+
 **Related Files**
 - `public/manifest.json`
 - `index.html`
 - (Future) `src/components/InstallPrompt.tsx` or equivalent
+- `src/App.tsx` (filter logic)
+- `src/types.ts` (Task interface — add optional dueDate?: string)
 
 **Guild Note:** This is the UX spec. Technical ownership remains with the assigned specialists. Let’s keep delivery sustainable.

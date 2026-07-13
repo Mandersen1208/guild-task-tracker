@@ -103,6 +103,33 @@ body {
   border-radius: 9999px;
 }
 
+/* Due date badges */
+.overdue-badge {
+  font-size: 10px;
+  background: #F8B4C4;
+  color: #5C4638;
+  padding: 1px 6px;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.today-badge {
+  font-size: 10px;
+  background: #F8B4C4;
+  color: #5C4638;
+  padding: 1px 6px;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.upcoming-badge {
+  font-size: 10px;
+  background: #E8D5C4;
+  color: #5C4638;
+  padding: 1px 6px;
+  border-radius: 9999px;
+}
+
 /* Empty State */
 .empty-state {
   animation: gentleBob 3s ease infinite;

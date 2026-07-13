@@ -110,4 +110,49 @@ self.addEventListener('message', (event) => {
   }
 });
 
+// === Notification Platform (Kisuke) ===
+// Handle clicks on our notifications to focus/open the PWA
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  const scope = self.location.pathname.replace(/service-worker\.js$/, '');
+  const urlToOpen = self.location.origin + scope;
+
+  event.waitUntil(
+    self.clients
+      .matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clientsArr) => {
+        // Focus existing client if open
+        for (const client of clientsArr) {
+          if (client.url.startsWith(urlToOpen) && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        // Open new window
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(urlToOpen);
+        }
+      })
+  );
+});
+
+// Receive SHOW_NOTIFICATION messages from the app (for EOD reminders via SW)
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SHOW_NOTIFICATION') {
+    const { title, options = {} } = event.data;
+    const iconPath = `${self.location.pathname.replace(/service-worker\.js$/, '')}icon-192.jpg`;
+    self.registration.showNotification(title, {
+      icon: iconPath,
+      badge: iconPath,
+      tag: 'eod-reminder',
+      renotify: false,
+      requireInteraction: false,
+      ...options,
+    });
+  }
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 console.log('[SW] Service worker loaded for Kawaii Daily PWA');

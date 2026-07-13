@@ -8,7 +8,24 @@ type Filter = 'all' | 'active' | 'completed';
 
 export default function App() {
   const { tasks, isLoaded, addTask, toggleComplete, deleteTask, resetDailyTasks } = useTasks();
-  const [filter, setFilter] = useState<Filter>('all');
+
+  // Persist filter for offline survival (minimal addition)
+  const [filter, setFilter] = useState<Filter>(() => {
+    try {
+      const saved = localStorage.getItem('filter') as Filter | null;
+      if (saved === 'all' || saved === 'active' || saved === 'completed') {
+        return saved;
+      }
+    } catch {}
+    return 'all';
+  });
+
+  // Save filter changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('filter', filter);
+    } catch {}
+  }, [filter]);
 
   // Daily reset on mount
   useEffect(() => {

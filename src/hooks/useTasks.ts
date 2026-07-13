@@ -13,14 +13,36 @@ export function useTasks() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) setTasks(parsed);
+        if (Array.isArray(parsed)) {
+          // safe parse + basic validation + migration for isDaily
+          const validated = parsed
+            .filter((t: any): t is Task =>
+              t &&
+              typeof t.id === 'string' &&
+              typeof t.text === 'string' &&
+              typeof t.completed === 'boolean'
+            )
+            .map((t: any) => ({
+              id: t.id,
+              text: t.text,
+              completed: t.completed,
+              isDaily: Boolean(t.isDaily),
+            }));
+          setTasks(validated);
+        }
       }
-    } catch {}
+    } catch {
+      // corrupted data or private mode: start fresh (silent for MVP)
+    }
     setIsLoaded(true);
   }, []);
 
   const save = (newTasks: Task[]) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newTasks));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newTasks));
+    } catch {
+      // storage full / private / quota: UI still works, data lost on reload
+    }
     setTasks(newTasks);
   };
 
@@ -46,15 +68,19 @@ export function useTasks() {
 
   // Daily reset logic (Shiroe)
   const resetDailyTasks = () => {
-    const today = new Date().toISOString().split('T')[0];
-    const lastReset = localStorage.getItem(LAST_RESET_KEY);
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const lastReset = localStorage.getItem(LAST_RESET_KEY);
 
-    if (lastReset !== today) {
-      const updated = tasks.map(t =>
-        t.isDaily ? { ...t, completed: false } : t
-      );
-      save(updated);
-      localStorage.setItem(LAST_RESET_KEY, today);
+      if (lastReset !== today) {
+        const updated = tasks.map(t =>
+          t.isDaily ? { ...t, completed: false } : t
+        );
+        save(updated);
+        localStorage.setItem(LAST_RESET_KEY, today);
+      }
+    } catch {
+      // ignore reset errors (non-critical)
     }
   };
 

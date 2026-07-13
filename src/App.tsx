@@ -33,12 +33,17 @@ export default function App() {
       <div className="kawaii-container p-8 relative">
         <div className="sparkles rounded-[24px]" />
 
-        <div className="text-center mb-8 relative z-10">
-          <div className="absolute top-0 right-0">
-            <Clock />
+        <div className="mb-8 relative z-10">
+          <div className="flex items-center justify-between">
+            <div className="w-9" aria-hidden="true"></div>
+            <div className="text-center">
+              <div className="kawaii-header text-3xl">my tasks ✨</div>
+              <p className="text-[#B8A99A] text-sm mt-1">Resets at midnight</p>
+            </div>
+            <div>
+              <Clock />
+            </div>
           </div>
-          <div className="kawaii-header text-3xl">my tasks ✨</div>
-          <p className="text-[#B8A99A] text-sm mt-1">Resets at midnight</p>
         </div>
 
         <div className="relative z-10">

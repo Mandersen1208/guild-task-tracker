@@ -3,8 +3,8 @@
   "short_name": "Kawaii Daily",
   "description": "My gentle daily tasks",
   "id": "kawaii-daily-v1",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/guild-task-tracker/",
+  "scope": "/guild-task-tracker/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
   "background_color": "#FFF8F5",
@@ -13,25 +13,25 @@
   "categories": ["productivity", "lifestyle"],
   "icons": [
     {
-      "src": "/icon-180.jpg",
+      "src": "/guild-task-tracker/icon-180.jpg",
       "sizes": "180x180",
       "type": "image/jpeg",
       "purpose": "any"
     },
     {
-      "src": "/icon-192.jpg",
+      "src": "/guild-task-tracker/icon-192.jpg",
       "sizes": "192x192",
       "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon-512.jpg",
+      "src": "/guild-task-tracker/icon-512.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon-1024.jpg",
+      "src": "/guild-task-tracker/icon-1024.jpg",
       "sizes": "1024x1024",
       "type": "image/jpeg",
       "purpose": "any"
@@ -42,8 +42,8 @@
       "name": "New Task",
       "short_name": "New",
       "description": "Create a gentle new task",
-      "url": "/?action=new",
-      "icons": [{ "src": "/icon-192.jpg", "sizes": "192x192" }]
+      "url": "/guild-task-tracker/?action=new",
+      "icons": [{ "src": "/guild-task-tracker/icon-192.jpg", "sizes": "192x192" }]
     }
   ]
 }

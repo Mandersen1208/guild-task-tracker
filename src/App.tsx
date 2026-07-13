@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTasks } from './hooks/useTasks';
 import TaskInput from './components/TaskInput';
 import TaskList from './components/TaskList';
+import Clock from './components/Clock';
 
 type Filter = 'all' | 'active' | 'completed';
 
@@ -33,6 +34,9 @@ export default function App() {
         <div className="sparkles rounded-[24px]" />
 
         <div className="text-center mb-8 relative z-10">
+          <div className="absolute top-0 right-0">
+            <Clock />
+          </div>
           <div className="kawaii-header text-3xl">my tasks ✨</div>
           <p className="text-[#B8A99A] text-sm mt-1">Resets at midnight</p>
         </div>

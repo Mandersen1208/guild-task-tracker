@@ -315,6 +315,7 @@ export default function App() {
         : 'Browser permission is needed before reminders can appear.';
 
   const activeReminderCount = Number(reminderSettings.taskRemindersEnabled) + Number(reminderSettings.eodRemindersEnabled);
+  const shouldShowNotificationPrompt = activeReminderCount > 0 && 'Notification' in window && notificationPermission === 'default';
 
   return (
     <main className="app-shell">
@@ -331,6 +332,19 @@ export default function App() {
         </header>
 
         <div className="panel-stack">
+          {shouldShowNotificationPrompt && (
+            <section className="notification-callout" aria-label="Enable notifications">
+              <div>
+                <span className="callout-kicker">🔔 reminders are ready</span>
+                <h2>Allow notifications?</h2>
+                <p>Turn on browser notifications so due-time and end-of-day reminders can actually pop up.</p>
+              </div>
+              <button onClick={requestNotificationPermission} type="button">
+                Allow ✨
+              </button>
+            </section>
+          )}
+
           <section className="settings-section" aria-label="Reminder settings">
             <button
               onClick={() => setSettingsOpen(open => !open)}

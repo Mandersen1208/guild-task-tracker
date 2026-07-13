@@ -162,6 +162,66 @@ input:focus-visible {
   gap: 1rem;
 }
 
+/* Notification permission prompt */
+.notification-callout {
+  position: relative;
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border: 2px solid rgba(248, 180, 196, 0.72);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.92), transparent 30%),
+    linear-gradient(135deg, rgba(255, 240, 245, 0.96), rgba(255, 248, 245, 0.82));
+  box-shadow: 0 14px 34px rgba(248, 180, 196, 0.16);
+}
+
+.notification-callout h2,
+.notification-callout p {
+  margin: 0;
+}
+
+.notification-callout h2 {
+  margin-top: 0.15rem;
+  color: #5c4638;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.notification-callout p {
+  margin-top: 0.25rem;
+  color: #8c6f5c;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.callout-kicker {
+  color: #b48d7a;
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.notification-callout button {
+  min-height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: #f8b4c4;
+  color: #5c4638;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(248, 180, 196, 0.28);
+  transition: transform 0.12s ease, background 0.16s ease;
+}
+
+.notification-callout button:hover {
+  background: #f5a6ba;
+}
+
+.notification-callout button:active {
+  transform: scale(0.98);
+}
+
 /* Settings */
 .settings-section {
   display: grid;

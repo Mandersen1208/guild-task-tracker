@@ -9,9 +9,10 @@ interface TaskListProps {
 
 function EmptyState() {
   return (
-    <div className="empty-state flex flex-col items-center justify-center py-14 text-center">
-      <div className="text-5xl mb-3 opacity-60">🌸</div>
-      <p className="text-[#B8A99A] text-sm">nothing here yet.<br />add something when you feel like it.</p>
+    <div className="empty-state" role="status">
+      <div className="empty-orb" aria-hidden="true">🌸</div>
+      <p>nothing here yet.</p>
+      <span>add a tiny quest when you feel ready.</span>
     </div>
   );
 }
@@ -20,7 +21,7 @@ export default function TaskList({ tasks, onToggle, onDelete }: TaskListProps) {
   if (tasks.length === 0) return <EmptyState />;
 
   return (
-    <div className="space-y-3">
+    <div className="task-list" aria-label="Tasks">
       {tasks.map(task => (
         <TaskItem key={task.id} task={task} onToggle={onToggle} onDelete={onDelete} />
       ))}

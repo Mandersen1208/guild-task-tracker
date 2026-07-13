@@ -23,7 +23,7 @@ function getDueInfo(dueDate?: string, dueTime?: string) {
   const timeLabel = formatTime(dueTime);
 
   if (!dueDate) {
-    return timeLabel ? { label: `Time ${timeLabel}`, className: 'upcoming-badge' } : null;
+    return timeLabel ? { label: `Time ${timeLabel}`, className: 'badge-upcoming' } : null;
   }
 
   const today = new Date();
@@ -31,50 +31,51 @@ function getDueInfo(dueDate?: string, dueTime?: string) {
   const due = new Date(dueDate + 'T00:00:00');
   const diffTime = due.getTime() - today.getTime();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  const suffix = timeLabel ? ` ${timeLabel}` : '';
+  const suffix = timeLabel ? ` · ${timeLabel}` : '';
 
   if (diffDays < 0) {
-    return { label: `Overdue${suffix}`, className: 'overdue-badge' };
+    return { label: `Overdue${suffix}`, className: 'badge-overdue' };
   }
   if (diffDays === 0) {
-    return { label: `Today${suffix}`, className: 'today-badge' };
+    return { label: `Today${suffix}`, className: 'badge-today' };
   }
   if (diffDays === 1) {
-    return { label: `Tomorrow${suffix}`, className: 'upcoming-badge' };
+    return { label: `Tomorrow${suffix}`, className: 'badge-upcoming' };
   }
-  return { label: `${due.toLocaleDateString([], { month: 'short', day: 'numeric' })}${suffix}`, className: 'upcoming-badge' };
+  return { label: `${due.toLocaleDateString([], { month: 'short', day: 'numeric' })}${suffix}`, className: 'badge-upcoming' };
 }
 
 export default function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
   const dueInfo = getDueInfo(task.dueDate, task.dueTime);
 
   return (
-    <div className={`task-row group flex items-center gap-3 px-4 py-3.5 ${task.completed ? 'completed' : ''}`}>
+    <article className={`task-row ${task.completed ? 'completed' : ''}`}>
       <input
         type="checkbox"
         checked={task.completed}
         onChange={() => onToggle(task.id)}
         aria-label={`Mark ${task.text} as ${task.completed ? 'incomplete' : 'complete'}`}
-        className="w-5 h-5 accent-[#F8B4C4] cursor-pointer"
+        className="task-check"
       />
-      <div className="flex-1 flex items-center gap-2 flex-wrap">
-        <span className={`text-[#5C4638] text-[15px] task-text ${task.completed ? 'line-through' : ''}`}>
-          {task.text}
-        </span>
-        {task.isDaily && (
-          <span className="daily-badge text-[10px]">daily</span>
-        )}
-        {dueInfo && (
-          <span className={`${dueInfo.className} text-[10px] ml-1`}>{dueInfo.label}</span>
+
+      <div className="task-content">
+        <span className="task-text">{task.text}</span>
+        {(task.isDaily || dueInfo) && (
+          <div className="task-meta" aria-label="Task details">
+            {task.isDaily && <span className="badge badge-daily">daily</span>}
+            {dueInfo && <span className={`badge ${dueInfo.className}`}>{dueInfo.label}</span>}
+          </div>
         )}
       </div>
+
       <button
         onClick={() => onDelete(task.id)}
-        className="opacity-0 group-hover:opacity-100 text-[#F8B4C4] hover:text-[#E07A5F] text-xl transition-all leading-none pb-0.5"
+        className="delete-task-button"
         aria-label={`Delete ${task.text}`}
+        type="button"
       >
         ×
       </button>
-    </div>
+    </article>
   );
 }

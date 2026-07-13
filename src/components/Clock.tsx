@@ -16,8 +16,9 @@ export default function Clock() {
   }, []);
 
   return (
-    <div className="text-[#C9B29F] text-sm flex items-center gap-1.5 bg-[#FFF8F5] px-3 py-1 rounded-full border border-[#F8B4C4]/40 shadow-sm">
-      🕒 {time}
+    <div className="clock-pill" aria-label={`Current time ${time}`}>
+      <span aria-hidden="true">🕒</span>
+      <span>{time}</span>
     </div>
   );
 }

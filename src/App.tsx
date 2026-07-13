@@ -290,7 +290,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [isLoaded, tasks, eodNotifiedToday, reminderSettings.eodRemindersEnabled]);
 
-  if (!isLoaded) return <div className="p-6">Loading...</div>;
+  if (!isLoaded) return <div className="app-loading app-shell">Loading your quests...</div>;
 
   const filteredTasks = tasks.filter(task => {
     if (filter === 'today') {
@@ -314,94 +314,125 @@ export default function App() {
         ? 'Browser notifications are blocked in browser settings.'
         : 'Browser permission is needed before reminders can appear.';
 
-  return (
-    <div className="max-w-[440px] mx-auto p-6 app-shell">
-      <div className="kawaii-container p-8 relative">
-        <div className="sparkles rounded-[24px]" />
+  const activeReminderCount = Number(reminderSettings.taskRemindersEnabled) + Number(reminderSettings.eodRemindersEnabled);
 
-        <div className="mb-8 relative z-10">
-          <div className="relative flex justify-center">
-            <div className="absolute right-0 top-1/2 -translate-y-1/2">
-              <Clock />
-            </div>
-            <div className="text-center">
-              <div className="kawaii-header text-3xl">my tasks ✨</div>
-              <p className="text-[#B8A99A] text-sm mt-1">Daily tasks reset when you return each day</p>
-            </div>
+  return (
+    <main className="app-shell">
+      <section className="kawaii-container" aria-label="Guild task tracker">
+        <div className="sparkles" />
+
+        <header className="app-header">
+          <div>
+            <p className="header-kicker">🌸 gentle guild board</p>
+            <h1 className="kawaii-header">my tasks</h1>
+            <p className="header-copy">Daily tasks reset when you return each day.</p>
+          </div>
+          <Clock />
+        </header>
+
+        <div className="stats-grid" aria-label="Task counts">
+          <div className="stat-card">
+            <span>All</span>
+            <strong>{totalCount}</strong>
+          </div>
+          <div className="stat-card">
+            <span>Today</span>
+            <strong>{todayCount}</strong>
+          </div>
+          <div className="stat-card">
+            <span>Upcoming</span>
+            <strong>{upcomingCount}</strong>
           </div>
         </div>
 
-        <div className="relative z-10">
-          <div className="mb-4">
+        <div className="panel-stack">
+          <section className="settings-section" aria-label="Reminder settings">
             <button
               onClick={() => setSettingsOpen(open => !open)}
-              className="settings-button w-full px-4 py-2.5 text-sm"
+              className="settings-button"
               aria-expanded={settingsOpen}
             >
-              Reminder settings {settingsOpen ? '▲' : '▼'}
+              <span>
+                <span className="settings-title">Reminder settings</span>
+                <span className="settings-subtitle">{activeReminderCount}/2 gentle nudges active</span>
+              </span>
+              <span className="settings-chevron" aria-hidden="true">{settingsOpen ? '⌃' : '⌄'}</span>
             </button>
 
             {settingsOpen && (
-              <div className="mt-3 p-4 bg-[#FFF8F5] border border-[#F8B4C4]/60 rounded-2xl text-sm text-[#5C4638]">
-                <div className="space-y-3">
-                  <label className="flex items-start gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={reminderSettings.taskRemindersEnabled}
-                      onChange={(e) => updateReminderSetting('taskRemindersEnabled', e.target.checked)}
-                      className="mt-1 accent-[#F8B4C4]"
-                    />
-                    <span>
-                      <span className="font-semibold">Task due date + time reminders</span>
-                      <span className="block text-xs text-[#8C6F5C]">Fires once when an incomplete task has both a due date and time.</span>
+              <div className="settings-panel">
+                <div className="settings-panel-header">
+                  <span aria-hidden="true">🔔</span>
+                  <div>
+                    <h2>Reminder garden</h2>
+                    <p>Choose which notifications are allowed to bloom.</p>
+                  </div>
+                </div>
+
+                <div className="setting-list">
+                  <label className="setting-row">
+                    <span className="setting-copy">
+                      <span className="setting-name">Task due date + time reminders</span>
+                      <span className="setting-note">Fires once when an incomplete task has both a due date and time.</span>
+                    </span>
+                    <span className="setting-toggle">
+                      <input
+                        type="checkbox"
+                        checked={reminderSettings.taskRemindersEnabled}
+                        onChange={(e) => updateReminderSetting('taskRemindersEnabled', e.target.checked)}
+                        className="sr-only"
+                      />
+                      <span className="toggle-track" aria-hidden="true"><span className="toggle-dot" /></span>
                     </span>
                   </label>
 
-                  <label className="flex items-start gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={reminderSettings.eodRemindersEnabled}
-                      onChange={(e) => updateReminderSetting('eodRemindersEnabled', e.target.checked)}
-                      className="mt-1 accent-[#F8B4C4]"
-                    />
-                    <span>
-                      <span className="font-semibold">End-of-day wrap-up reminders</span>
-                      <span className="block text-xs text-[#8C6F5C]">Keeps the existing 7–9pm gentle review reminder.</span>
+                  <label className="setting-row">
+                    <span className="setting-copy">
+                      <span className="setting-name">End-of-day wrap-up reminders</span>
+                      <span className="setting-note">Keeps the existing 7–9pm gentle review reminder.</span>
+                    </span>
+                    <span className="setting-toggle">
+                      <input
+                        type="checkbox"
+                        checked={reminderSettings.eodRemindersEnabled}
+                        onChange={(e) => updateReminderSetting('eodRemindersEnabled', e.target.checked)}
+                        className="sr-only"
+                      />
+                      <span className="toggle-track" aria-hidden="true"><span className="toggle-dot" /></span>
                     </span>
                   </label>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-[#E8D5C4]">
-                  <p className="text-xs text-[#8C6F5C]">{permissionText}</p>
+                <div className="permission-card">
+                  <p>{permissionText}</p>
                   {notificationPermission === 'default' && 'Notification' in window && (
                     <button
                       onClick={requestNotificationPermission}
-                      className="mt-2 px-4 py-1.5 text-xs rounded-full bg-[#F8B4C4] text-[#5C4638] font-semibold hover:bg-[#E89AB0] active:scale-[0.985] transition-all"
+                      className="permission-button"
+                      type="button"
                     >
                       Allow browser notifications ✨
                     </button>
                   )}
-                  <p className="mt-2 text-[11px] text-[#B8A99A]">Reminders are best-effort while the app/PWA is open or active.</p>
+                  <span>Reminders are best-effort while the app/PWA is open or active.</span>
                 </div>
               </div>
             )}
-          </div>
+          </section>
 
           <TaskInput onAdd={addTask} />
 
-          <div className="flex gap-2 mb-6">
-            <button onClick={() => setFilter('all')} aria-pressed={filter === 'all'} className={`filter-pill flex-1 py-3 text-sm ${filter === 'all' ? 'active' : 'bg-white text-[#8C6F5C] hover:bg-[#FFF8F5]'}`}>All ({totalCount})</button>
-            <button onClick={() => setFilter('today')} aria-pressed={filter === 'today'} className={`filter-pill flex-1 py-3 text-sm ${filter === 'today' ? 'active' : 'bg-white text-[#8C6F5C] hover:bg-[#FFF8F5]'}`}>Today ({todayCount})</button>
-            <button onClick={() => setFilter('upcoming')} aria-pressed={filter === 'upcoming'} className={`filter-pill flex-1 py-3 text-sm ${filter === 'upcoming' ? 'active' : 'bg-white text-[#8C6F5C] hover:bg-[#FFF8F5]'}`}>Upcoming ({upcomingCount})</button>
-          </div>
+          <nav className="filter-bar" aria-label="Task filters">
+            <button onClick={() => setFilter('all')} aria-pressed={filter === 'all'} className={`filter-pill ${filter === 'all' ? 'active' : ''}`}>All <span>{totalCount}</span></button>
+            <button onClick={() => setFilter('today')} aria-pressed={filter === 'today'} className={`filter-pill ${filter === 'today' ? 'active' : ''}`}>Today <span>{todayCount}</span></button>
+            <button onClick={() => setFilter('upcoming')} aria-pressed={filter === 'upcoming'} className={`filter-pill ${filter === 'upcoming' ? 'active' : ''}`}>Upcoming <span>{upcomingCount}</span></button>
+          </nav>
 
           <TaskList tasks={filteredTasks} onToggle={toggleComplete} onDelete={deleteTask} />
         </div>
-      </div>
+      </section>
 
-      <div className="text-center mt-4 text-xs text-[#B8A99A]">
-        made with care
-      </div>
-    </div>
+      <p className="made-with-care">made with care · tiny steps count</p>
+    </main>
   );
 }

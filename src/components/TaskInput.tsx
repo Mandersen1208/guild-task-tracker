@@ -28,51 +28,54 @@ export default function TaskInput({ onAdd }: TaskInputProps) {
   };
 
   return (
-    <div className="mb-6">
-      <div className="flex flex-col gap-2 sm:flex-row">
+    <section className="task-composer" aria-label="Add a new task">
+      <div className="composer-label">
+        <span>New quest</span>
+        <span className="composer-hint">due date + time optional</span>
+      </div>
+
+      <div className="task-input-row">
         <input
           ref={inputRef}
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="add something..."
+          placeholder="write a tiny quest..."
           aria-label="Task text"
-          className="task-input flex-1 px-5 py-3.5 text-[#5C4638] placeholder:text-[#C9B29F] text-sm w-full"
+          className="task-input"
         />
-        <button onClick={handleSubmit} className="add-button px-6 py-3.5 text-sm w-full sm:w-auto">
-          Add
+        <button onClick={handleSubmit} className="add-button" type="button">
+          Add ✨
         </button>
       </div>
 
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2 text-xs text-[#8C6F5C]">
-        <label className="flex items-center gap-2 cursor-pointer">
+      <div className="task-options-grid">
+        <label className="option-chip daily-option">
           <input
             type="checkbox"
             checked={isDaily}
             onChange={(e) => setIsDaily(e.target.checked)}
             className="accent-[#F8B4C4]"
           />
-          <span>Daily task (resets every day)</span>
+          <span>Daily reset</span>
         </label>
 
-        <label className="flex items-center gap-1.5">
-          <span className="text-[#8C6F5C]">Due date:</span>
+        <label className="mini-field">
+          <span>Due date</span>
           <input
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
-            className="text-xs px-2 py-1 rounded border border-[#F8B4C4]/40 bg-white text-[#5C4638] focus:outline-none focus:border-[#F8B4C4]"
           />
         </label>
 
-        <label className="flex items-center gap-1.5">
-          <span className="text-[#8C6F5C]">Time:</span>
+        <label className="mini-field">
+          <span>Due time</span>
           <input
             type="time"
             value={dueTime}
             onChange={(e) => setDueTime(e.target.value)}
-            className="text-xs px-2 py-1 rounded border border-[#F8B4C4]/40 bg-white text-[#5C4638] focus:outline-none focus:border-[#F8B4C4]"
           />
         </label>
 
@@ -82,13 +85,14 @@ export default function TaskInput({ onAdd }: TaskInputProps) {
               setDueDate('');
               setDueTime('');
             }}
-            className="text-[#E07A5F] hover:text-[#C45D4A] text-xs leading-none underline decoration-dotted"
+            className="clear-due-button"
             aria-label="Clear due date and time"
+            type="button"
           >
             clear due
           </button>
         )}
       </div>
-    </div>
+    </section>
   );
 }

@@ -330,21 +330,6 @@ export default function App() {
           <Clock />
         </header>
 
-        <div className="stats-grid" aria-label="Task counts">
-          <div className="stat-card">
-            <span>All</span>
-            <strong>{totalCount}</strong>
-          </div>
-          <div className="stat-card">
-            <span>Today</span>
-            <strong>{todayCount}</strong>
-          </div>
-          <div className="stat-card">
-            <span>Upcoming</span>
-            <strong>{upcomingCount}</strong>
-          </div>
-        </div>
-
         <div className="panel-stack">
           <section className="settings-section" aria-label="Reminder settings">
             <button

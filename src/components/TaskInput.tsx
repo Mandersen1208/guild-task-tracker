@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 
 interface TaskInputProps {
-  onAdd: (text: string) => void;
+  onAdd: (text: string, isDaily?: boolean) => void;
 }
 
 export default function TaskInput({ onAdd }: TaskInputProps) {

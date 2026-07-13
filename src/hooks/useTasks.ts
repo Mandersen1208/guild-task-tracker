@@ -3,6 +3,7 @@ import { Task } from '../types';
 
 const STORAGE_KEY = 'tasks';
 const LAST_RESET_KEY = 'lastResetDate';
+const DUE_TIME_PATTERN = /^\d{2}:\d{2}$/;
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -14,7 +15,7 @@ export function useTasks() {
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) {
-          // safe parse + basic validation + migration for isDaily
+          // safe parse + basic validation + migration for optional fields
           const validated = parsed
             .filter((t: any): t is Task =>
               t &&
@@ -28,6 +29,7 @@ export function useTasks() {
               completed: t.completed,
               isDaily: Boolean(t.isDaily),
               dueDate: typeof t.dueDate === 'string' ? t.dueDate : undefined,
+              dueTime: typeof t.dueTime === 'string' && DUE_TIME_PATTERN.test(t.dueTime) ? t.dueTime : undefined,
             }));
           setTasks(validated);
         }
@@ -47,13 +49,14 @@ export function useTasks() {
     setTasks(newTasks);
   };
 
-  const addTask = (text: string, isDaily: boolean = false, dueDate?: string) => {
+  const addTask = (text: string, isDaily: boolean = false, dueDate?: string, dueTime?: string) => {
     const newTask: Task = {
       id: crypto.randomUUID(),
       text: text.trim(),
       completed: false,
       isDaily,
       dueDate: dueDate || undefined,
+      dueTime: dueTime || undefined,
     };
     save([...tasks, newTask]);
   };
@@ -71,7 +74,8 @@ export function useTasks() {
   // Daily reset logic (Shiroe)
   const resetDailyTasks = () => {
     try {
-      const today = new Date().toISOString().split('T')[0];
+      const now = new Date();
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
       const lastReset = localStorage.getItem(LAST_RESET_KEY);
 
       if (lastReset !== today) {

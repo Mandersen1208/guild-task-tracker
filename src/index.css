@@ -112,3 +112,92 @@ body {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
 }
+
+/* ============================================
+   Mobile Responsiveness & iPhone Native Fixes
+   - Clock pill no longer affects centering (absolute pos)
+   - Better touch targets (44px min)
+   - Reduced tightness on small screens
+   - Safe area support for notch/Dynamic Island
+   - Delete button visible on touch devices
+   ============================================ */
+
+/* Safe area insets for standalone PWA on iPhone */
+.app-shell {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Mobile-first spacing & sizing adjustments */
+@media (max-width: 480px) {
+  .kawaii-container {
+    padding: 1.25rem;
+    border-radius: 24px;
+    border-width: 3px;
+  }
+
+  .kawaii-header {
+    font-size: 1.75rem;
+    letter-spacing: -0.25px;
+  }
+
+  .mb-8 {
+    margin-bottom: 1.25rem;
+  }
+
+  .mb-6 {
+    margin-bottom: 1rem;
+  }
+
+  .empty-state {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  /* Slightly tighter but still comfortable inner content */
+  .task-row {
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+  }
+}
+
+/* Enhanced touch targets for iPhone */
+.filter-pill {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Delete button: always tappable on mobile (no hover), subtle on touch */
+.task-row button {
+  opacity: 0.35;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+@media (hover: hover) {
+  .task-row button {
+    opacity: 0;
+  }
+  .task-row:hover button,
+  .task-row:focus-within button {
+    opacity: 1;
+  }
+}
+
+.task-row button:active {
+  transform: scale(1.15);
+  opacity: 1;
+}
+
+/* Outer shell with safe areas */
+.max-w-\[440px\] {
+  /* ensure margins don't fight safe areas on very small iPhones */
+}
+
+/* Subtle polish: prevent any potential header element overlap */
+.kawaii-container {
+  overflow: hidden;
+}

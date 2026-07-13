@@ -27,6 +27,7 @@ export function useTasks() {
               text: t.text,
               completed: t.completed,
               isDaily: Boolean(t.isDaily),
+              dueDate: typeof t.dueDate === 'string' ? t.dueDate : undefined,
             }));
           setTasks(validated);
         }
@@ -46,12 +47,13 @@ export function useTasks() {
     setTasks(newTasks);
   };
 
-  const addTask = (text: string, isDaily: boolean = false) => {
+  const addTask = (text: string, isDaily: boolean = false, dueDate?: string) => {
     const newTask: Task = {
       id: crypto.randomUUID(),
       text: text.trim(),
       completed: false,
       isDaily,
+      dueDate: dueDate || undefined,
     };
     save([...tasks, newTask]);
   };

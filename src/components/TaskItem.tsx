@@ -6,6 +6,26 @@ interface TaskItemProps {
   onDelete: (id: string) => void;
 }
 
+function getDueInfo(dueDate?: string) {
+  if (!dueDate) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const due = new Date(dueDate + 'T00:00:00');
+  const diffTime = due.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 0) {
+    return { label: 'Overdue', className: 'overdue-badge' };
+  }
+  if (diffDays === 0) {
+    return { label: 'Today', className: 'today-badge' };
+  }
+  if (diffDays === 1) {
+    return { label: 'Tomorrow', className: 'upcoming-badge' };
+  }
+  return { label: due.toLocaleDateString([], { month: 'short', day: 'numeric' }), className: 'upcoming-badge' };
+}
+
 export default function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
   return (
     <div className={`task-row group flex items-center gap-3 px-4 py-3.5 ${task.completed ? 'completed' : ''}`}>
@@ -22,6 +42,12 @@ export default function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
         {task.isDaily && (
           <span className="daily-badge text-[10px]">daily</span>
         )}
+        {(() => {
+          const dueInfo = getDueInfo(task.dueDate);
+          return dueInfo ? (
+            <span className={`${dueInfo.className} text-[10px] ml-1`}>{dueInfo.label}</span>
+          ) : null;
+        })()}
       </div>
       <button
         onClick={() => onDelete(task.id)}
